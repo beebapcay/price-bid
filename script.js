@@ -1,3 +1,4 @@
+const mentiUrl = 'https://api.mentimeter.com/questions/c3616436febb/result?isPublic=true';
 const url = 'https://api.mentimeter.com/questions/c3616436febb/result?isPublic=true';
 
 const attributes = ['visa', 'amount', 'price', 'rank'];
@@ -41,9 +42,7 @@ function applyHeader(table) {
     theadr.append(th);
   });
 
-  thead.append(theadr);
-
-  table.append(thead);
+  table.append(thead.append(theadr));
 }
 
 function formatPrice(price) {
@@ -83,4 +82,6 @@ $(document).ready(async function () {
   const data = await fetchBidData().then(data => formatBidData(data));
   
   createTable(data);
+
+  $('#menti-link').attr('href', mentiUrl);
 });

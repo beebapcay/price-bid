@@ -5,23 +5,34 @@
 .main-container {
   display: flex;
   justify-content: center;
+  position: relative;
 }
 
 #table-container {
   width: 550px;
-  height: calc(100vh - 50px);
+  height: calc(100vh - 25px - 50px);
   overflow-y: auto;
 
-  margin: 25px 0;
+  margin: 25px 0 50px;
 
   font-family: 'Montserrat', sans-serif;
+
+  border: 1px solid #e6e6e66d;
+}
+
+a#menti-link {
+  position: absolute;
+  bottom: 10px;
+  right: calc(50% - 275px);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
 }
 
 table {
   overflow:scroll;
 }
 
-thead tr:nth-child(1) th{
+thead tr:nth-child(1) th {
   position: sticky;
   top: 0;
   z-index: 10;
