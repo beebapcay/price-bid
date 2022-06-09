@@ -32,21 +32,17 @@ function formatBidData(bidData) {
 }
 
 function applyHeader(table) {
-  const tableHeader = document.createElement('thead');
-  tableHeader.className = 'table-dark';
+  const thead = $('<thead class="table-dark"></thead>');
 
-  const headerRow = document.createElement('tr');
+  const theadr = $('<tr></tr>');
   for (let header of attributes) {
-    const th = document.createElement('th');
-
-    th.className = header;
-    th.innerText = header.toLocaleUpperCase();
-
-    headerRow.appendChild(th);
+    const th = $(`<th class=${header}></th>`).html(header.toLocaleUpperCase());
+    
+    theadr.append(th);
   }
-  tableHeader.appendChild(headerRow);
+  thead.append(theadr);
 
-  table.appendChild(tableHeader);
+  table.append(thead);
 }
 
 function formatPrice(price) {
@@ -54,39 +50,35 @@ function formatPrice(price) {
 }
 
 function applyBody(table, bidData) {
-  const tableBody = document.createElement('tbody');
+  const tbody = $('<tbody></tbody>');
 
   for (let item of bidData) {
-    const tr = document.createElement('tr');
+    const tbodyr = $('<tr></tr>');
 
     for (let attribute of attributes) {
-      const td = document.createElement('td');
+      const td = $(`<td class=${attribute}></td>`).html(attribute === 'price' ? formatPrice(item[attribute]) : item[attribute]);
 
-      td.className = attribute;
-      td.innerText = attribute === 'price' ? formatPrice(item[attribute]) : item[attribute];
-
-      tr.appendChild(td);
+      tbodyr.append(td);
     }
 
-    tableBody.appendChild(tr);
+    tbody.append(tbodyr);
   }
 
-  table.appendChild(tableBody);
+  table.append(tbody);
 }
 
 function createTable(bidData) {
-  const tableContainer = document.getElementById('table-container');
+  const tableContainer = $('#table-container');
 
-  const table = document.createElement('table');
-  table.className = 'table table-striped table-hover table-bordered text-center';
+  const table = $('<table class="table table-striped table-hover table-bordered text-center"></table>');
 
   applyHeader(table);
   applyBody(table, bidData);
 
-  tableContainer.appendChild(table);
+  tableContainer.append(table);
 }
 
-window.addEventListener('load', async () => {
+$(document).ready(async function () {
   const data = await fetchBidData().then(data => formatBidData(data));
   
   createTable(data);
