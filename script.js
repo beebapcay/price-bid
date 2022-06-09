@@ -35,11 +35,12 @@ function applyHeader(table) {
   const thead = $('<thead class="table-dark"></thead>');
 
   const theadr = $('<tr></tr>');
-  for (let header of attributes) {
+
+  $.each(attributes, (index, header) => {
     const th = $(`<th class=${header}></th>`).html(header.toLocaleUpperCase());
-    
     theadr.append(th);
-  }
+  });
+
   thead.append(theadr);
 
   table.append(thead);
@@ -52,17 +53,17 @@ function formatPrice(price) {
 function applyBody(table, bidData) {
   const tbody = $('<tbody></tbody>');
 
-  for (let item of bidData) {
+
+  $.each(bidData, (index, item) => {
     const tbodyr = $('<tr></tr>');
 
-    for (let attribute of attributes) {
-      const td = $(`<td class=${attribute}></td>`).html(attribute === 'price' ? formatPrice(item[attribute]) : item[attribute]);
-
+    $.each(attributes, (index, col) => {
+      const td = $(`<td class=${col}></td>`).html(col === 'price' ? formatPrice(item[col]) : item[col]);
       tbodyr.append(td);
-    }
+    });
 
     tbody.append(tbodyr);
-  }
+  });
 
   table.append(tbody);
 }
