@@ -38,8 +38,17 @@ thead tr:nth-child(1) th {
   z-index: 10;
 }
 
+tr.redund {
+  background-color: #fff7f7;
+  text-decoration: line-through;
+}
+
+tr.redund td {
+  background-color: transparent;
+}
+
 .visa {
-  width: 27.5%;
+  width: 30%;
 }
 
 .amount {
@@ -51,7 +60,7 @@ thead tr:nth-child(1) th {
 }
 
 .rank {
-  width: 22.5%;
+  width: 20%;
 }
 
 td.price {

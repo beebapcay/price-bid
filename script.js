@@ -1,5 +1,10 @@
 const mentiUrl = 'https://api.mentimeter.com/questions/c3616436febb/result?isPublic=true';
+
 const url = 'https://api.mentimeter.com/questions/c3616436febb/result?isPublic=true';
+
+const threshold = 2;
+
+const intervalSeconds = 30;
 
 const attributes = ['visa', 'amount', 'price', 'rank'];
 
@@ -7,6 +12,41 @@ async function fetchBidData() {
   const response = await fetch(url);
   const data = await response.json();
   return data?.results;
+}
+
+function getRedundantData(sortedBidData) {
+  const frequentVisaBid = {};
+
+  const filteredBidData = sortedBidData.reduce((acc, curr) => {
+    const frequent = frequentVisaBid[curr.visa] || 0;
+
+    curr.redund = false;
+
+    if (frequent >= threshold) {
+      curr.redund = true;
+      acc.push(curr);
+    }
+
+    else if (curr.amount + frequent <= threshold) {
+      frequentVisaBid[curr.visa] = frequent + curr.amount;
+      curr.redund = false;
+      acc.push(curr);
+    }
+
+    else if (curr.amount + frequent > threshold) {
+      const acceptAmount = threshold - frequent;
+
+      acc.push({ ...curr, amount: acceptAmount, redund: false });
+      acc.push({ ...curr, amount: curr.amount - acceptAmount, redund: true });
+
+      frequentVisaBid[curr.visa] = frequent + curr.amount;
+    }
+
+    return acc;
+  }, []);
+
+  console.log(filteredBidData);
+  return filteredBidData;
 }
 
 function formatBidData(bidData) {
@@ -26,10 +66,19 @@ function formatBidData(bidData) {
 
   formatedBidData.sort((a, b) => a.price - b.price).reverse();
 
-  return formatedBidData.map((item, index, arr) => {
-    item.rank = arr[index - 1] ? arr[index - 1].rank + arr[index - 1].amount : 1;
-    return item;
-  });
+  const applyRedundantData = getRedundantData(formatedBidData);
+
+  let accRank = 1;
+  for (let item of applyRedundantData) {
+    if (item.redund) {
+      item.rank = 0;
+    } else {
+      item.rank = accRank;
+      accRank += item.amount;
+    }
+  }
+
+  return applyRedundantData;
 }
 
 function applyHeader(table) {
@@ -54,10 +103,19 @@ function applyBody(table, bidData) {
 
 
   $.each(bidData, (index, item) => {
-    const tbodyr = $('<tr></tr>');
+    const tbodyr = $(`<tr class=${item.redund ? 'redund' : ''}></tr>`);
 
     $.each(attributes, (index, col) => {
-      const td = $(`<td class=${col}></td>`).html(col === 'price' ? formatPrice(item[col]) : item[col]);
+      const td = $(`<td class=${col}></td>`);
+      
+      if (col === 'visa') {
+        td.html(`${item[col]} ${item.redund ? '(redund)' : ''}`)
+      } else if (col === 'price') {
+        td.html(formatPrice(item[col]));
+      } else {
+        td.html(item[col]);
+      }
+
       tbodyr.append(td);
     });
 
@@ -79,6 +137,12 @@ function createTable(bidData) {
 }
 
 $(document).ready(async function () {
+  // setInterval(async function () {
+  //   const data = await fetchBidData().then(data => formatBidData(data));
+  
+  //   createTable(data);
+  // }, intervalSeconds * 1000);
+
   const data = await fetchBidData().then(data => formatBidData(data));
   
   createTable(data);
