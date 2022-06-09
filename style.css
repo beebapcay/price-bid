@@ -17,6 +17,16 @@
   font-family: 'Montserrat', sans-serif;
 }
 
+table {
+  overflow:scroll;
+}
+
+thead tr:nth-child(1) th{
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
 .visa {
   width: 27.5%;
 }
