@@ -1,7 +1,7 @@
 const axios = require("axios");
 const numeral = require('numeral');
 
-axios('https://api.mentimeter.com/questions/c3616436febb/result?isPublic=true')
+fetch('https://api.mentimeter.com/questions/c3616436febb/result?isPublic=true')
   .then(response => {
     const resultBid = response.data.results;
     

@@ -1,0 +1,40 @@
+* {
+  box-sizing: border-box;
+}
+
+.main-container {
+  display: flex;
+  justify-content: center;
+}
+
+#table-container {
+  width: 550px;
+  height: calc(100vh - 50px);
+  overflow-y: auto;
+
+  margin: 25px 0;
+
+  font-family: 'Montserrat', sans-serif;
+}
+
+.visa {
+  width: 27.5%;
+}
+
+.amount {
+  width: 20%;
+}
+
+.price {
+  width: 30%
+}
+
+.rank {
+  width: 22.5%;
+}
+
+td.price {
+  padding-right: 35px;
+  padding-left: 35px;
+  text-align: right;
+}
