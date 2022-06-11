@@ -14,7 +14,7 @@
   <!-- Google fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Poppins&display=swap" rel="stylesheet">
 
   <!-- Jquery -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -25,6 +25,14 @@
 </head>
 <body>
   <div class="main-container">
+    <div class="spinner-container">
+      <div class="spinner-border spinner-border-sm text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="auto-updating">Auto update (every 30s)</p>
+    </div>
+    
+  
     <div id="table-container"></div>
     <a href="#" id="menti-link" target="_blank">Link: Menti BID</a>
   </div>

@@ -3,9 +3,12 @@
 }
 
 .main-container {
+  width: 100%;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   position: relative;
+
+  align-items: center;
 }
 
 #table-container {
@@ -18,6 +21,28 @@
   font-family: 'Montserrat', sans-serif;
 
   border: 1px solid #e6e6e66d;
+}
+
+.spinner-container {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin-top: 25px;
+  margin-left: 25px;
+  align-items: center;
+}
+
+.auto-updating {
+  margin-bottom: 0;
+  margin-left: 5px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13.5px;
+  color: #545454;
+}
+
+.spinner-border {
+  visibility: hidden;
 }
 
 a#menti-link {
@@ -67,4 +92,44 @@ td.price {
   padding-right: 35px;
   padding-left: 35px;
   text-align: right;
+}
+
+@media only screen and (max-width: 600px) {
+  .visa {
+    width: 30%;
+  }
+  
+  .amount {
+    width: 17.5%;
+  }
+  
+  .price {
+    width: 35%
+  }
+  
+  .rank {
+    width: 17.5%;
+  }
+
+  .spinner-container {
+    position: static;
+    margin-top: 10px;
+    margin-left: 2.5%;
+    align-self: flex-start;
+  }
+
+  #table-container {
+    width: 95%;
+    height: initial;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    margin-top: 10px;
+  }
+
+  a#menti-link {
+    position: static;
+    margin-bottom: 15px;
+    align-self: flex-end;
+    margin-right: 2.5%;
+  }
 }

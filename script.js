@@ -108,14 +108,12 @@ function applyBody(table, bidData) {
     $.each(attributes, (index, col) => {
       const td = $(`<td class=${col}></td>`);
       
-      if (col === 'visa') {
-        td.html(`${item[col]} ${item.redund ? '(redund)' : ''}`)
-      } else if (col === 'price') {
+      if (col === 'price') {
         td.html(formatPrice(item[col]));
       } else {
         td.html(item[col]);
       }
-
+    
       tbodyr.append(td);
     });
 
@@ -136,16 +134,38 @@ function createTable(bidData) {
   tableContainer.append(table);
 }
 
-$(document).ready(async function () {
-  // setInterval(async function () {
-  //   const data = await fetchBidData().then(data => formatBidData(data));
-  
-  //   createTable(data);
-  // }, intervalSeconds * 1000);
-
+async function clearFetchAndCreateTable() {
+  $('#table-container').empty();
   const data = await fetchBidData().then(data => formatBidData(data));
-  
   createTable(data);
+}
+
+$(document).ready(async function () {
+  clearFetchAndCreateTable();
+
+  setInterval(() => {
+    $('.spinner-border').visible();
+    clearFetchAndCreateTable();
+
+    setTimeout(() => {
+      $('.spinner-border').invisible();
+    }, 1500);
+
+  }, intervalSeconds * 1000 );
+
 
   $('#menti-link').attr('href', mentiUrl);
 });
+
+(function($) {
+  $.fn.invisible = function() {
+      return this.each(function() {
+          $(this).css("visibility", "hidden");
+      });
+  };
+  $.fn.visible = function() {
+      return this.each(function() {
+          $(this).css("visibility", "visible");
+      });
+  };
+}(jQuery));
