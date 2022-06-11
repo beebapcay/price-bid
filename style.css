@@ -7,7 +7,6 @@
   display: flex;
   flex-direction: column;
   position: relative;
-
   align-items: center;
 }
 
@@ -94,7 +93,31 @@ td.price {
   text-align: right;
 }
 
-@media only screen and (max-width: 600px) {
+@media screen and (max-width: 1280px) {
+  #table-container {
+    height: initial;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    margin-top: 10px;
+  }
+
+  a#menti-link {
+    position: static;
+    margin-bottom: 15px;
+    align-self: flex-end;
+    margin-right: 2.5%;
+  }
+
+  .spinner-container {
+    position: static;
+    margin-top: 10px;
+    margin-left: 2.5%;
+    align-self: flex-start;
+  }
+  
+}
+
+@media screen and (max-width: 600px) {
   .visa {
     width: 30%;
   }
@@ -111,25 +134,8 @@ td.price {
     width: 17.5%;
   }
 
-  .spinner-container {
-    position: static;
-    margin-top: 10px;
-    margin-left: 2.5%;
-    align-self: flex-start;
-  }
 
   #table-container {
     width: 95%;
-    height: initial;
-    box-sizing: border-box;
-    margin-bottom: 20px;
-    margin-top: 10px;
-  }
-
-  a#menti-link {
-    position: static;
-    margin-bottom: 15px;
-    align-self: flex-end;
-    margin-right: 2.5%;
   }
 }
