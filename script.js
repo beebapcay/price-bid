@@ -8,6 +8,14 @@ const intervalSeconds = 30;
 
 const attributes = ['visa', 'amount', 'price', 'rank'];
 
+const tableContainer = $('#table-container');
+
+const spinnerTableContainer = $('.spinner-table-container');
+
+const spinnerAnnount = $('.spinner-annount');
+
+const mentiLink = $('#menti-link');
+
 async function fetchBidData() {
   const response = await fetch(url);
   const data = await response.json();
@@ -45,7 +53,6 @@ function getRedundantData(sortedBidData) {
     return acc;
   }, []);
 
-  console.log(filteredBidData);
   return filteredBidData;
 }
 
@@ -124,8 +131,6 @@ function applyBody(table, bidData) {
 }
 
 function createTable(bidData) {
-  const tableContainer = $('#table-container');
-
   const table = $('<table class="table table-striped table-hover table-bordered text-center"></table>');
 
   applyHeader(table);
@@ -135,26 +140,33 @@ function createTable(bidData) {
 }
 
 async function clearFetchAndCreateTable() {
-  $('#table-container').empty();
+  tableContainer.hide();
+  spinnerTableContainer.css('display', 'flex');
+
   const data = await fetchBidData().then(data => formatBidData(data));
+  tableContainer.empty();
   createTable(data);
+
+  spinnerTableContainer.hide();
+  tableContainer.show();
 }
 
 $(document).ready(async function () {
   clearFetchAndCreateTable();
 
   setInterval(() => {
-    $('.spinner-border').visible();
+    spinnerAnnount.visible();
+
     clearFetchAndCreateTable();
 
     setTimeout(() => {
-      $('.spinner-border').invisible();
+      spinnerAnnount.invisible();
     }, 1500);
 
   }, intervalSeconds * 1000 );
 
 
-  $('#menti-link').attr('href', mentiUrl);
+  mentiLink.attr('href', mentiUrl);
 });
 
 (function($) {
