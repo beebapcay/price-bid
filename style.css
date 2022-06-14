@@ -149,6 +149,10 @@ td.price {
     width: 17.5%;
   }
 
+  .all-history-container {
+    width: 95%;
+  }
+
   #table-container {
     margin-bottom: 10px;
     margin-top: 10px;
