@@ -161,6 +161,8 @@ async function clearFetchAndCreateTable() {
 $(document).ready(async function () {
   clearFetchAndCreateTable();
 
+  console.log('Please don\'t crack me!');
+
   setInterval(() => {
     spinnerAnnount.visible();
 
