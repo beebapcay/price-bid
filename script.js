@@ -25,35 +25,50 @@ async function fetchBidData() {
 function getRedundantData(sortedBidData) {
   const frequentVisaBid = {};
 
-  const filteredBidData = sortedBidData.reduce((acc, curr) => {
-    const frequent = frequentVisaBid[curr.visa] || 0;
+  // const filteredBidData = sortedBidData.reduce((acc, curr) => {
+  //   const frequent = frequentVisaBid[curr.visa] || 0;
 
-    curr.redund = false;
+  //   curr.redund = false;
 
-    if (frequent >= threshold) {
-      curr.redund = true;
-      acc.push(curr);
-    }
+  //   if (frequent >= threshold) {
+  //     curr.redund = true;
+  //     acc.push(curr);
+  //   }
 
-    else if (curr.amount + frequent <= threshold) {
-      frequentVisaBid[curr.visa] = frequent + curr.amount;
-      curr.redund = false;
-      acc.push(curr);
-    }
+  //   else if (curr.amount + frequent <= threshold) {
+  //     frequentVisaBid[curr.visa] = frequent + curr.amount;
+  //     curr.redund = false;
+  //     acc.push(curr);
+  //   }
 
-    else if (curr.amount + frequent > threshold) {
-      const acceptAmount = threshold - frequent;
+  //   else if (curr.amount + frequent > threshold) {
+  //     const acceptAmount = threshold - frequent;
 
-      acc.push({ ...curr, amount: acceptAmount, redund: false });
-      acc.push({ ...curr, amount: curr.amount - acceptAmount, redund: true });
+  //     acc.push({ ...curr, amount: acceptAmount, redund: false });
+  //     acc.push({ ...curr, amount: curr.amount - acceptAmount, redund: true });
 
-      frequentVisaBid[curr.visa] = frequent + curr.amount;
+  //     frequentVisaBid[curr.visa] = frequent + curr.amount;
+  //   }
+
+  //   return acc;
+  // }, []);
+
+  const filterBidData = sortedBidData.reduce((acc, curr, idx, arr) => {
+    if (curr.amount > threshold) {
+      acc.push({ ...curr, redund: false, wrong: true });
+    } else {
+      if (idx !== arr.findIndex(item => item.visa === curr.visa)) {
+        acc.push({ ...curr, redund: true, wrong: false });
+      } else {
+        acc.push({ ...curr, redund: false, wrong: false });
+      }
     }
 
     return acc;
-  }, []);
 
-  return filteredBidData;
+  }, []); 
+
+  return filterBidData;
 }
 
 function formatBidData(bidData) {
@@ -110,7 +125,7 @@ function applyBody(table, bidData) {
 
 
   $.each(bidData, (index, item) => {
-    const tbodyr = $(`<tr class=${item.redund ? 'redund' : ''}></tr>`);
+    const tbodyr = $(`<tr class=${item.redund || item.wrong ? 'redund-or-wrong' : ''}></tr>`);
 
     $.each(attributes, (index, col) => {
       const td = $(`<td class=${col}></td>`);

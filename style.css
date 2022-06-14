@@ -70,7 +70,7 @@ thead tr:nth-child(1) th {
   z-index: 10;
 }
 
-tr.redund {
+tr.redund-or-wrong {
   background-color: #fff7f7;
   text-decoration: line-through;
 }
