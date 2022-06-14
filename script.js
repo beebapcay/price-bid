@@ -16,6 +16,8 @@ const spinnerAnnount = $('.spinner-annount');
 
 const mentiLink = $('#menti-link');
 
+const allHistoryCheck = $('#allCheck');
+
 async function fetchBidData() {
   const response = await fetch(url);
   const data = await response.json();
@@ -25,36 +27,10 @@ async function fetchBidData() {
 function getRedundantData(sortedBidData) {
   const frequentVisaBid = {};
 
-  // const filteredBidData = sortedBidData.reduce((acc, curr) => {
-  //   const frequent = frequentVisaBid[curr.visa] || 0;
-
-  //   curr.redund = false;
-
-  //   if (frequent >= threshold) {
-  //     curr.redund = true;
-  //     acc.push(curr);
-  //   }
-
-  //   else if (curr.amount + frequent <= threshold) {
-  //     frequentVisaBid[curr.visa] = frequent + curr.amount;
-  //     curr.redund = false;
-  //     acc.push(curr);
-  //   }
-
-  //   else if (curr.amount + frequent > threshold) {
-  //     const acceptAmount = threshold - frequent;
-
-  //     acc.push({ ...curr, amount: acceptAmount, redund: false });
-  //     acc.push({ ...curr, amount: curr.amount - acceptAmount, redund: true });
-
-  //     frequentVisaBid[curr.visa] = frequent + curr.amount;
-  //   }
-
-  //   return acc;
-  // }, []);
-
   const filterBidData = sortedBidData.reduce((acc, curr, idx, arr) => {
-    if (curr.amount > threshold) {
+    if (curr.redund || curr.wrong) {
+      acc.push(curr);
+    } else if (curr.amount > threshold) {
       acc.push({ ...curr, redund: false, wrong: true });
     } else {
       if (idx !== arr.findIndex(item => item.visa === curr.visa)) {
@@ -71,16 +47,30 @@ function getRedundantData(sortedBidData) {
   return filterBidData;
 }
 
+function filterShowAllHistory(applyRedundantData) {
+  if (allHistoryCheck.is(':checked')) {
+    return applyRedundantData;
+  } else {
+    return applyRedundantData.filter(item => !item.redund && !item.wrong);
+  }
+}
+
 function formatBidData(bidData) {
   const formatedBidData = bidData.reduce(
     (acc, curr) => {
       let [visa, amount, price] = curr.split("-");
 
-      visa = visa.trim();
-      amount = parseInt(amount.trim());
-      price = parseInt(price.trim().replace(/[.]/g, ''));
+      if (!visa || !amount || !price) {
+        acc.push({ ...curr, wrong: true, redund: false });
+      } else {
+        visa = visa.trim();
+        amount = parseInt(amount.trim());
+        price = parseInt(price.trim().replace(/[.]/g, ''));
 
-      acc.push({visa, amount, price});
+        if (visa.length < 3 || amount < 1 || isNaN(amount) || isNaN(price)) {
+          acc.push({ ...curr, wrong: true, redund: false });
+        } else acc.push({visa, amount, price});
+      }
 
       return acc;
     }, []
@@ -90,9 +80,11 @@ function formatBidData(bidData) {
 
   const applyRedundantData = getRedundantData(formatedBidData);
 
+  const filteredBidData = filterShowAllHistory(applyRedundantData);
+
   let accRank = 1;
-  for (let item of applyRedundantData) {
-    if (item.redund) {
+  for (let item of filteredBidData) {
+    if (item.redund || item.wrong) {
       item.rank = 0;
     } else {
       item.rank = accRank;
@@ -100,7 +92,7 @@ function formatBidData(bidData) {
     }
   }
 
-  return applyRedundantData;
+  return filteredBidData;
 }
 
 function applyHeader(table) {
@@ -196,3 +188,7 @@ $(document).ready(async function () {
       });
   };
 }(jQuery));
+
+allHistoryCheck.on('change', () => {
+  clearFetchAndCreateTable();
+});

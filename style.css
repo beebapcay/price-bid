@@ -35,11 +35,23 @@ html, body {
   color: #545454;
 }
 
+.all-history-container {
+  width: 550px;
+  margin-top: 15px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #3b3b3b;
+}
+
+#allCheck {
+  margin-right: 2.5px;
+}
+
 #table-container {
   width: 550px;
   height: calc(100vh - 25px - 50px);
   overflow-y: auto;
-  margin: 25px 0 50px;
+  margin: 10px 0 50px;
   font-family: 'Montserrat', sans-serif;
   border: 1px solid #e6e6e66d;
 }
